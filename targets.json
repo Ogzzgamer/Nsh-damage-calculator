@@ -1,0 +1,34 @@
+{
+  "英雄鏡天閣外閣": {
+    "defense": 3957,
+    "elemental_resist": 60,
+    "block": 814,
+    "crit_resist": 500,
+    "defense_base": 1500,
+    "shield_base": 484
+  },
+  "英雄鏡天閣禁閣": {
+    "defense": 4099,
+    "elemental_resist": 70,
+    "block": 855,
+    "crit_resist": 500,
+    "defense_base": 1500,
+    "shield_base": 479
+  },
+  "英雄洞庭問劍": {
+    "defense": 3133,
+    "elemental_resist": 60,
+    "block": 677,
+    "crit_resist": 500,
+    "defense_base": 0,
+    "shield_base": 414
+  },
+   "普通謫仙驚濤": {
+    "defense": 4090,
+    "elemental_resist": 70,
+    "block": 852,
+    "crit_resist": 500,
+    "defense_base": 1500,
+    "shield_base": 484
+  }
+}
