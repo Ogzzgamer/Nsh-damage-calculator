@@ -37,9 +37,12 @@
         
         // 內功詞條選項
         const INNER_SKILL_OPTIONS = [
-            "攻擊", "元素攻擊", "破防", "忽視抗性", "命中", "會心", 
-            "首領克制", "會心傷害", "破盾", "力量", "氣海", "身法", "根骨", "耐力"
-        ];
+    "攻擊", "最大攻擊", "最小攻擊", "元素攻擊", "破防", "命中", "會心", 
+    "首領克制", "首領抵禦", "破盾", "力量", "氣海", "身法", "根骨", "耐力",
+    "流派克制", "流派抵禦", "防禦", "格擋", 
+    "內功防禦", "內功格擋", "外功防禦", "外功格擋",
+    "氣盾", "外功氣盾", "內功氣盾", "全元素抗性"
+];
 
         // 上半身部位 (適用百鍊套裝效果)
         const UPPER_BODY_SLOTS = ["頭部", "手套", "護腕", "腰帶", "鞋子"];
@@ -452,32 +455,53 @@
         
         // 計算內功屬性加成
         function calculateInnerSkillStats(type) {
-            const skills = type === 'current' ? currentInnerSkills : newInnerSkills;
-            const stats = new Array(15).fill(0);
-            
-            // 遍歷所有內功的所有副詞條
-            for (let i = 0; i < skills.length; i++) {
-                for (let j = 0; j < skills[i].length; j++) {
-                    const skill = skills[i][j];
-                    if (skill.type && skill.value > 0) {
-                        // 根據屬性名稱找到對應的索引
-                        const statIndex = STAT_NAMES.findIndex(name => name === skill.type);
-                        if (statIndex !== -1) {
-                            stats[statIndex] += skill.value;
-                        }
-                    }
-                }
-            }
-            
-            // 保存結果
-            if (type === 'current') {
-                currentInnerStats = stats;
-                displayInnerSkillStats('current', stats);
-            } else {
-                newInnerStats = stats;
-                displayInnerSkillStats('new', stats);
-            }
-        }
+			const skills = type === 'current' ? currentInnerSkills : newInnerSkills;
+			const stats = new Array(15).fill(0);
+    
+			// 新增變數用於計算攻擊相關屬性
+			let attackSum = 0;
+			let maxAttackSum = 0;
+			let minAttackSum = 0;
+    
+			// 遍歷所有內功的所有副詞條
+			for (let i = 0; i < skills.length; i++) {
+				for (let j = 0; j < skills[i].length; j++) {
+					const skill = skills[i][j];
+					if (skill.type && skill.value > 0) {
+						// 根據屬性名稱處理特殊情況
+						if (skill.type === "攻擊") {
+							attackSum += skill.value;
+						} 
+						else if (skill.type === "最大攻擊") {
+							maxAttackSum += skill.value;
+						} 
+						else if (skill.type === "最小攻擊") {
+							minAttackSum += skill.value;
+						}
+						else {
+							// 其他屬性正常處理
+							const statIndex = STAT_NAMES.findIndex(name => name === skill.type);
+							if (statIndex !== -1) {
+								stats[statIndex] += skill.value;
+							}
+						}
+					}
+				}
+			}
+    
+			// 計算攻擊值：(最大攻擊 + 最小攻擊) / 2 + 普通攻擊
+			const combinedAttack = attackSum + (maxAttackSum + minAttackSum) / 2;
+			stats[0] += combinedAttack; // 加到攻擊屬性上
+    
+			// 保存結果
+			if (type === 'current') {
+				currentInnerStats = stats;
+				displayInnerSkillStats('current', stats);
+			} else {
+				newInnerStats = stats;
+				displayInnerSkillStats('new', stats);
+			}
+		}
         
         // 顯示內功屬性
         function displayInnerSkillStats(type, stats) {
