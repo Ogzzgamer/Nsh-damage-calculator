@@ -8,7 +8,7 @@
     "shield_base": 484
   },
   "英雄鏡天閣禁閣": {
-    "defense": 4099,
+    "defense": 4087,
     "elemental_resist": 70,
     "block": 855,
     "crit_resist": 500,
@@ -30,5 +30,13 @@
     "crit_resist": 500,
     "defense_base": 1500,
     "shield_base": 484
+  },
+    "英雄謫仙驚濤": {
+    "defense": 4567,
+    "elemental_resist": 70,
+    "block": 917,
+    "crit_resist": 650,
+    "defense_base": 1500,
+    "shield_base": 414
   }
 }
