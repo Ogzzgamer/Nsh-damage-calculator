@@ -1075,9 +1075,15 @@
                 const selectedItem = currentWearingEquipment[slot];
                 if (selectedItem && EQUIPMENT_PRESETS_BY_SLOT[slot][selectedItem]) {
                     const itemStats = EQUIPMENT_PRESETS_BY_SLOT[slot][selectedItem];
-                    for (let i = 0; i < itemStats.length; i++) {
-                        currentEquipmentStats[i] += itemStats[i];
-                    }
+                    
+for (let i = 0; i < itemStats.length; i++) {
+    if (i === 7) {
+        currentEquipmentStats[i] += itemStats[i] / 100;
+    } else {
+        currentEquipmentStats[i] += itemStats[i];
+    }
+}
+
                 }
             });
             
@@ -1143,9 +1149,15 @@
                 const selectedItem = newEquipment[slot];
                 if (selectedItem && EQUIPMENT_PRESETS_BY_SLOT[slot][selectedItem]) {
                     const itemStats = EQUIPMENT_PRESETS_BY_SLOT[slot][selectedItem];
-                    for (let i = 0; i < itemStats.length; i++) {
-                        newEquipmentStats[i] += itemStats[i];
-                    }
+                    
+for (let i = 0; i < itemStats.length; i++) {
+    if (i === 7) {
+        newEquipmentStats[i] += itemStats[i] / 100;
+    } else {
+        newEquipmentStats[i] += itemStats[i];
+    }
+}
+
                 }
             });
             
@@ -1183,9 +1195,15 @@
                 const selectedItem = currentWearingEquipment[slot];
                 if (selectedItem && EQUIPMENT_PRESETS_BY_SLOT[slot][selectedItem]) {
                     const itemStats = EQUIPMENT_PRESETS_BY_SLOT[slot][selectedItem];
-                    for (let i = 0; i < itemStats.length; i++) {
-                        currentEquipmentStats[i] += itemStats[i];
-                    }
+                    
+for (let i = 0; i < itemStats.length; i++) {
+    if (i === 7) {
+        currentEquipmentStats[i] += itemStats[i] / 100;
+    } else {
+        currentEquipmentStats[i] += itemStats[i];
+    }
+}
+
                 }
             });
             
@@ -1278,9 +1296,15 @@
                     const selectedItem = currentWearingEquipment[slot];
                     if (selectedItem && EQUIPMENT_PRESETS_BY_SLOT[slot][selectedItem]) {
                         const itemStats = EQUIPMENT_PRESETS_BY_SLOT[slot][selectedItem];
-                        for (let i = 0; i < itemStats.length; i++) {
-                            currentEquipmentStats[i] += itemStats[i];
-                        }
+                        
+for (let i = 0; i < itemStats.length; i++) {
+    if (i === 7) {
+        currentEquipmentStats[i] += itemStats[i] / 100;
+    } else {
+        currentEquipmentStats[i] += itemStats[i];
+    }
+}
+
                     }
                 });
                 
@@ -1321,9 +1345,15 @@
                     const selectedItem = newEquipment[slot];
                     if (selectedItem && EQUIPMENT_PRESETS_BY_SLOT[slot][selectedItem]) {
                         const itemStats = EQUIPMENT_PRESETS_BY_SLOT[slot][selectedItem];
-                        for (let i = 0; i < itemStats.length; i++) {
-                            newEquipmentStats[i] += itemStats[i];
-                        }
+                        
+for (let i = 0; i < itemStats.length; i++) {
+    if (i === 7) {
+        newEquipmentStats[i] += itemStats[i] / 100;
+    } else {
+        newEquipmentStats[i] += itemStats[i];
+    }
+}
+
                     }
                 });
                 
