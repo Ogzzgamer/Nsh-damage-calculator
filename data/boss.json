@@ -1,0 +1,114 @@
+{
+  "英雄鏡天閣外閣": {
+    "stats": {
+      "defense": 3957,
+      "elemental_resist": 60,
+      "block": 814,
+      "crit_resist": 500,
+      "defense_base": 1500,
+      "shield_base": 484
+    },
+    "coeffs": {
+      "defK": 2860,
+      "critK": 1600,
+      "hitK": 1200,
+      "eleK": 250
+    }
+  },
+  "英雄鏡天閣禁閣": {
+    "stats": {
+      "defense": 4087,
+      "elemental_resist": 70,
+      "block": 855,
+      "crit_resist": 500,
+      "defense_base": 1500,
+      "shield_base": 479
+    },
+    "coeffs": {
+      "defK": 2860,
+      "critK": 1600,
+      "hitK": 1200,
+      "eleK": 250
+    }
+  },
+  "英雄洞庭問劍": {
+    "stats": {
+      "defense": 3133,
+      "elemental_resist": 60,
+      "block": 677,
+      "crit_resist": 500,
+      "defense_base": 0,
+      "shield_base": 414
+    },
+    "coeffs": {
+      "defK": 2860,
+      "critK": 1600,
+      "hitK": 1200,
+      "eleK": 250
+    }
+  },
+  "普通謫仙驚濤": {
+    "stats": {
+      "defense": 4090,
+      "elemental_resist": 70,
+      "block": 852,
+      "crit_resist": 500,
+      "defense_base": 1500,
+      "shield_base": 484
+    },
+    "coeffs": {
+      "defK": 2860,
+      "critK": 1600,
+      "hitK": 1200,
+      "eleK": 250
+    }
+  },
+  "2.1版本木樁": {
+    "stats": {
+      "defense": 8920,
+      "elemental_resist": 1897,
+      "block": 1730,
+      "crit_resist": 1770,
+      "defense_base": 9000,
+      "shield_base": 0
+    },
+    "coeffs": {
+      "defK": 7940,
+      "critK": 1142,
+      "hitK": 4480,
+      "eleK": 1630
+    }
+  },
+  "2.1團本木樁": {
+    "stats": {
+      "defense": 12017,
+      "elemental_resist": 2337,
+      "block": 2540,
+      "crit_resist": 2315,
+      "defense_base": 13900,
+      "shield_base": 0
+    },
+    "coeffs": {
+      "defK": 10755,
+      "critK": 1540,
+      "hitK": 6045,
+      "eleK": 2017
+    }
+  },
+  "2.1英雄團本木樁": {
+    "stats": {
+      "defense": 15635,
+      "elemental_resist": 3039,
+      "block": 3303,
+      "crit_resist": 3030,
+      "defense_base": 15440,
+      "shield_base": 0
+    },
+    "coeffs": {
+      "defK": 13902,
+      "critK": 1988,
+      "hitK": 7828,
+      "eleK": 2605
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "日月兩儀": {
+    "element": "火金",
+    "description": "提升傷害加成，並根據當前氣血獲得額外攻擊力。",
+    "effect": {
+      "DAMAGE_BONUS_PCT": 0.05,
+      "ATTACK_FIXED": 100
+    }
+  },
+  "破釜": {
+    "element": "金",
+    "description": "大幅提升攻擊力，但降低自身防禦。",
+    "effect": {
+      "ATTACK_PCT": 0.06,
+      "DEFENSE_PCT": -0.05
+    }
+  },
+  "鳴干戈": {
+    "element": "金",
+    "description": "提升會心機率與會心傷害。",
+    "effect": {
+      "CRIT_CHANCE_PCT": 0.02,
+      "CRIT_DAMAGE_PCT": 0.05
+    }
+  },
+  "太白赤陽": {
+    "element": "火",
+    "description": "提升元素攻擊與忽視抗性。",
+    "effect": {
+      "ELEMENT_ATTACK": 150,
+      "IGNORE_RESIST": 50
+    }
+  },
+  "點霜徑": {
+    "element": "水",
+    "description": "提升命中與首領克制。",
+    "effect": {
+      "HIT_FIXED": 120,
+      "BOSS_SUPPRESSION_PCT": 0.03
+    }
+  },
+  "無": {
+    "element": "無",
+    "description": "未裝備內功",
+    "effect": {}
+  }
+}

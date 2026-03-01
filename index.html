@@ -1,541 +1,121 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>傷害計算器 - 完整內功配置版</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Noto+Sans+TC&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="star.css">
-</head>
-<body class="min-h-screen p-4" style="background: radial-gradient(ellipse at bottom, #1e3a8a 0%, #0f172a 100%);">
-    <div class="stars" id="stars"></div>
-    <div class="max-w-7xl mx-auto">
-        <!-- 標題 -->
-        <div class="text-center mb-8 mt-4">
-            <h1 class="text-4xl font-bold text-white mb-2">傷害計算器</h1>
-            <p class="text-purple-300 mb-4">完整內功配置版</p>
-            <div class="w-32 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mx-auto"></div>
-        </div>
-
-        <!-- 數據加載狀態 -->
-        <div id="dataLoading" class="text-center p-8">
-            <div class="loader mx-auto mb-4"></div>
-            <p class="text-purple-300 font-medium">正在加載裝備與目標數據...</p>
-            <p class="text-sm text-purple-200 mt-2">請稍候，數據將從外部JSON文件加載</p>
-        </div>
-
-        <!-- 職業選擇區域 (初始隱藏) -->
-        <div id="appContent" class="hidden">
-            <!-- 職業選擇區域 -->
-            <div class="mb-8">
-                <div class="card-shadow rounded-2xl p-6 card-gradient-1 card-hover">
-                    <h2 class="text-xl font-semibold mb-6 section-title">⚔️ 職業選擇</h2>
-                    <div class="grid lg:grid-cols-3 gap-6">
-                        <!-- 主職業選擇 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-3 text-gray-100"><i class="fas fa-crown mr-2 text-amber-300"></i>主職業</h3>
-                            <select id="mainProfessionSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white bg-opacity-90 text-gray-800">
-                                <option value="">請選擇主職業</option>
-                                <optgroup label="內功職業">
-                                    <option value="神相" selected>神相</option>
-                                    <option value="九靈">九靈</option>
-                                    <option value="素問">素問</option>
-                                    <option value="龍吟">龍吟</option>
-                                </optgroup>
-                                <optgroup label="外功職業">
-                                    <option value="碎夢">碎夢</option>
-                                    <option value="鐵衣">鐵衣</option>
-                                    <option value="血河">血河</option>
-                                </optgroup>
-                            </select>
-                        </div>
-
-                        <!-- 特質選擇 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-3 text-gray-100"><i class="fas fa-star mr-2 text-purple-300"></i>特質 (副職業)</h3>
-                            <select id="traitSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white bg-opacity-90 text-gray-800">
-                                <option value="">請選擇特質</option>
-                                <optgroup label="內功特質">
-                                    <option value="神相">神相</option>
-                                    <option value="九靈">九靈</option>
-                                    <option value="素問">素問</option>
-                                    <option value="龍吟" selected>龍吟</option>
-                                </optgroup>
-                                <optgroup label="外功特質">
-                                    <option value="碎夢">碎夢</option>
-                                    <option value="鐵衣">鐵衣</option>
-                                    <option value="血河">血河</option>
-                                </optgroup>
-                            </select>
-                        </div>
-
-                        <!-- 職業效果顯示 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-3 text-gray-100"><i class="fas fa-magic mr-2 text-blue-300"></i>職業效果</h3>
-                            <div id="professionEffects" class="text-sm bg-white bg-opacity-20 p-3 rounded-lg h-32 text-white">
-                                <div class="flex items-center justify-center h-full">
-                                    <i class="fas fa-info-circle mr-2"></i>請選擇職業查看效果
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 目標選擇區域 -->
-            <div class="mb-8">
-                <div class="card-shadow rounded-2xl p-6 card-gradient-2 card-hover">
-                    <div class="grid lg:grid-cols-2 gap-6">
-                        <!-- 目標選擇 -->
-                        <div>
-                            <h2 class="text-xl font-semibold mb-4 section-title">🎯 選擇目標</h2>
-                            <select id="targetSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white bg-opacity-90 text-gray-800">
-                                <option value="">請選擇目標</option>
-                                <!-- 目標選項將從JSON加載 -->
-                            </select>
-                        </div>
-
-                        <!-- 目標屬性顯示 -->
-                        <div>
-                            <h3 class="text-xl font-semibold mb-4 section-title">📊 目標屬性</h3>
-                            <div id="targetStats" class="space-y-2 text-sm p-3 bg-white bg-opacity-20 rounded-lg text-white">
-                                <div class="flex items-center justify-center h-24">
-                                    <i class="fas fa-crosshairs mr-2"></i>請先選擇目標
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 五維屬性顯示區域 -->
-            <div class="mb-8">
-                <div class="card-shadow rounded-2xl p-6 card-gradient-3 card-hover">
-                    <h2 class="text-xl font-semibold mb-6 section-title">📊 五維屬性</h2>
-                    <div class="five-stats-grid">
-                        <div class="five-stat-card">
-                            <div class="five-stat-value" id="strengthValue">200</div>
-                            <div class="five-stat-label">力量</div>
-                        </div>
-                        <div class="five-stat-card">
-                            <div class="five-stat-value" id="qihaiValue">180</div>
-                            <div class="five-stat-label">氣海</div>
-                        </div>
-                        <div class="five-stat-card">
-                            <div class="five-stat-value" id="agilityValue">150</div>
-                            <div class="five-stat-label">身法</div>
-                        </div>
-                        <div class="five-stat-card">
-                            <div class="five-stat-value" id="constitutionValue">120</div>
-                            <div class="five-stat-label">根骨</div>
-                        </div>
-                        <div class="five-stat-card">
-                            <div class="five-stat-value" id="enduranceValue">100</div>
-                            <div class="five-stat-label">耐力</div>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-sm text-purple-200">
-                        <p><i class="fas fa-info-circle text-blue-300 mr-2"></i>五維屬性會根據職業自動轉換為戰鬥屬性</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 五維屬性轉換顯示 -->
-            <div class="mb-8">
-                <div class="card-shadow rounded-2xl p-6 card-gradient-4 card-hover">
-                    <h2 class="text-xl font-semibold mb-6 section-title">🔄 五維屬性轉換</h2>
-                    <div class="grid md:grid-cols-2 gap-6" id="conversionDisplay">
-                        <div class="text-center py-4 text-white">
-                            請選擇職業查看轉換規則
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 傷害計算區域 -->
-            <div class="mt-8">
-                <div class="card-shadow rounded-2xl p-6 card-gradient-5 card-hover">
-                    <h2 class="text-xl font-semibold mb-4 section-title">⚔️ 傷害計算器</h2>
-                    <div class="grid lg:grid-cols-3 gap-6">
-                        <!-- 當前總屬性輸入 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-3 text-purple-200"><i class="fas fa-calculator mr-2 text-blue-300"></i>當前總屬性 (含裝備)</h3>
-                            <div class="space-y-3">
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">攻擊</label>
-                                        <input type="number" id="current_attack" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="3500">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">元素攻擊</label>
-                                        <input type="number" id="current_elemental_attack" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="1800">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">破防</label>
-                                        <input type="number" id="current_armor_break" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="1200">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">忽視抗性</label>
-                                        <input type="number" id="current_ignore_resist" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="300">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">命中</label>
-                                        <input type="number" id="current_hit" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="800">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">會心</label>
-                                        <input type="number" id="current_crit" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="1500">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">首領克制</label>
-                                        <input type="number" id="current_boss_damage" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="450">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">首領克制%</label>
-                                        <input type="number" id="current_boss_damage_percent" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="12.5" step="0.1">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">會心傷害%</label>
-                                        <input type="number" id="current_crit_damage" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="165.0" step="0.1">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">破盾</label>
-                                        <input type="number" id="current_shield_break" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="200">
-                                    </div>
-                                </div>
-                                <div class="mt-4">
-                                    <h4 class="text-md font-medium mb-2 text-purple-200"><i class="fas fa-dumbbell mr-2 text-cyan-300"></i>五維屬性</h4>
-                                    <div class="grid grid-cols-2 gap-2">
-                                        <div>
-                                            <label class="block text-sm mb-1 text-purple-200">力量</label>
-                                            <input type="number" id="current_strength" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="200">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm mb-1 text-purple-200">氣海</label>
-                                            <input type="number" id="current_qihai" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="180">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm mb-1 text-purple-200">身法</label>
-                                            <input type="number" id="current_agility" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="150">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm mb-1 text-purple-200">根骨</label>
-                                            <input type="number" id="current_constitution" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="120">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm mb-1 text-purple-200">耐力</label>
-                                            <input type="number" id="current_endurance" class="w-full p-2 border border-gray-300 rounded-lg text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="100">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 手動微調區域 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-3 text-purple-200"><i class="fas fa-sliders-h mr-2 text-purple-300"></i>手動微調 (可選)</h3>
-                            <div class="p-4 bg-white bg-opacity-20 rounded-lg border border-gray-200">
-                                <h4 class="text-sm font-medium mb-3 text-purple-200">新裝備額外調整</h4>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">攻擊</label>
-                                        <input type="number" id="manual_attack" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">元素攻擊</label>
-                                        <input type="number" id="manual_elemental_attack" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">破防</label>
-                                        <input type="number" id="manual_armor_break" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">忽視抗性</label>
-                                        <input type="number" id="manual_ignore_resist" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">命中</label>
-                                        <input type="number" id="manual_hit" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">會心</label>
-                                        <input type="number" id="manual_crit" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">首領克制</label>
-                                        <input type="number" id="manual_boss_damage" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">首領克制%</label>
-                                        <input type="number" id="manual_boss_damage_percent" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0" step="0.1">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm mb-1 text-purple-200">會心傷害%</label>
-                                        <input type="number" id="manual_crit_damage" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0" step="0.1">
-                                    </div>
-                                </div>
-                                <div class="mt-4">
-                                    <h4 class="text-sm font-medium mb-3 text-purple-200">五維屬性調整</h4>
-                                    <div class="grid grid-cols-2 gap-2">
-                                        <div>
-                                            <label class="block text-sm mb-1 text-purple-200">力量</label>
-                                            <input type="number" id="manual_strength" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm mb-1 text-purple-200">氣海</label>
-                                            <input type="number" id="manual_qihai" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm mb-1 text-purple-200">身法</label>
-                                            <input type="number" id="manual_agility" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm mb-1 text-purple-200">根骨</label>
-                                            <input type="number" id="manual_constitution" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm mb-1 text-purple-200">耐力</label>
-                                            <input type="number" id="manual_endurance" class="w-full p-2 border border-gray-300 rounded text-sm stat-input bg-white bg-opacity-90 text-gray-800" value="0">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 傷害計算結果 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-3 text-purple-200"><i class="fas fa-bullseye mr-2 text-red-300"></i>傷害計算結果</h3>
-                            <div class="space-y-4">
-                                <button onclick="calculateDamage()" class="w-full star-btn calc-btn">
-                                    <i class="fas fa-calculator"></i> 計算傷害差異
-                                </button>
-                                <div id="damageResults" class="space-y-3">
-                                    <div class="text-center text-sm p-4 bg-white bg-opacity-20 rounded-lg text-white">
-                                        <i class="fas fa-lightbulb text-purple-300 text-lg mb-2"></i>
-                                        <p class="mb-1">1. 輸入當前總屬性</p>
-                                        <p class="mb-1">2. 選擇當前裝備並計算基礎面板</p>
-                                        <p class="mb-1">3. 選擇新裝備配置</p>
-                                        <p>4. 點擊計算傷害差異</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 內功配置區域 -->
-            <div class="mt-8">
-                <div class="card-shadow rounded-2xl p-6 card-gradient-9 card-hover">
-					<div class="flex justify-between items-center mb-0">
-						<h2 class="text-xl font-semibold section-title">🧠 內功配置 (6個內功，每個內功7個副詞條)</h2>
-						<button class="toggle-btn bg-purple-700 hover:bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
-							<i class="fas fa-chevron-down"></i>
-						</button>
-					</div>
-                    <div class="toggle-content mt-4">
-                    <div class="grid lg:grid-cols-2 gap-8">
-                        <!-- 當前內功配置 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-4 text-purple-200"><i class="fas fa-brain mr-2"></i>當前內功配置</h3>
-                            <div class="p-4 bg-white bg-opacity-20 rounded-lg border border-blue-200">
-                                <div id="currentInnerSkills" class="space-y-4">
-                                    <!-- 當前內功配置將在這裡生成 -->
-                                </div>
-                                <button onclick="calculateInnerSkillStats('current')" class="w-full mt-4 star-btn base-btn">
-                                    <i class="fas fa-calculator"></i> 計算當前內功屬性
-                                </button>
-                            </div>
-                            
-                            <!-- 當前內功屬性顯示 -->
-                            <div class="mt-4 p-4 bg-gray-500 bg-opacity-20 rounded-lg border border-gray-900">
-                                <h4 class="text-sm font-medium mb-3 text-purple-200">當前內功屬性</h4>
-                                <div id="currentInnerStatsDisplay" class="text-sm text-white">
-                                    <div>請先計算內功屬性</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 新內功配置 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-4 text-purple-200"><i class="fas fa-sync-alt mr-2"></i>新內功配置</h3>
-                            <div class="p-4 bg-white bg-opacity-20 rounded-lg border border-purple-200">
-                                <div id="newInnerSkills" class="space-y-4">
-                                    <!-- 新內功配置將在這裡生成 -->
-                                </div>
-                                <button onclick="calculateInnerSkillStats('new')" class="w-full mt-4 star-btn new-equip-btn">
-                                    <i class="fas fa-calculator"></i> 計算新內功屬性
-                                </button>
-                            </div>
-                            
-                            <!-- 新內功屬性顯示 -->
-                            <div class="mt-4 p-4 bg-amber-200 bg-opacity-20 border border-amber-600">
-                                <h4 class="text-sm font-medium mb-3 text-purple-200">新內功屬性對比 (與當前內功差異)</h4>
-                                <div id="newInnerStatsDisplay" class="text-sm text-white">
-                                    <div>請先選擇新內功並計算</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-					</div>
-            </div>
-
-            <!-- 五維屬性轉換說明 -->
-			<!-- 裝備配置區域 -->
-            <div class="mt-8">
-                <div class="card-shadow rounded-2xl p-6 card-gradient-6 card-hover">
-					<div class="flex justify-between items-center mb-0">
-						<h2 class="text-xl font-semibold mb-6 section-title">🛡️ 裝備配置</h2>
-						<button class="toggle-btn bg-purple-700 hover:bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
-							<i class="fas fa-chevron-down"></i>
-						</button>
-					</div>
-					<div class="toggle-content mt-4">
-                    <div class="grid lg:grid-cols-2 gap-8">
-                        <!-- 當前穿戴裝備 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-4 text-purple-200"><i class="fas fa-user mr-2"></i>當前穿戴裝備</h3>
-                            <div class="p-4 bg-white bg-opacity-20 rounded-lg border border-blue-200">
-                                <div class="space-y-3" id="currentEquipmentSelectors">
-                                    <!-- 當前裝備選擇器將在這裡生成 -->
-                                </div>
-                                <button onclick="calculateBaseStats()" class="w-full mt-4 star-btn base-btn">
-                                    <i class="fas fa-calculator"></i> 計算基礎面板
-                                </button>
-                            </div>
-                            
-                            <!-- 基礎面板顯示 -->
-                            <div class="mt-4 p-4 bg-green-500 bg-opacity-20 rounded-lg border border-green-900">
-                                <h4 class="text-sm font-medium mb-3 text-purple-200">基礎面板 (不含裝備)</h4>
-                                <div id="baseStatsDisplay" class="text-sm text-white">
-                                    <div>請先計算基礎面板</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 新裝備配置 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-4 text-purple-200"><i class="fas fa-sync-alt mr-2"></i>新裝備配置</h3>
-                            <div class="p-4 bg-white bg-opacity-20 rounded-lg border border-purple-200">
-                                <div class="space-y-3" id="newEquipmentSelectors">
-                                    <!-- 新裝備選擇器將在這裡生成 -->
-                                </div>
-                                <button onclick="calculateNewEquipmentStats()" class="w-full mt-4 star-btn new-equip-btn">
-                                    <i class="fas fa-calculator"></i> 計算新裝備屬性
-                                </button>
-                            </div>
-                            
-                            <!-- 新裝備屬性顯示 -->
-                            <div class="mt-4 p-4 bg-orange-200 bg-opacity-50 rounded-lg border border-orange-400">
-                                <h4 class="text-sm font-medium mb-3 text-purple-200">新裝備屬性對比 (與當前裝備差異)</h4>
-                                <div id="newEquipmentStatsDisplay" class="text-sm text-white">
-                                    <div>請先選擇新裝備並計算</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-					</div>
-                </div>
-            </div>
-
-            <!-- 套裝效果顯示區域 -->
-            <div class="mt-4">
-                <div class="card-shadow rounded-2xl p-6 card-gradient-7 card-hover">
-                    <h2 class="text-xl font-semibold mb-4 section-title">🧩 裝備效果</h2>
-                    <div class="grid lg:grid-cols-2 gap-6">
-                        <!-- 當前裝備套裝效果 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-3 set-effect-header text-purple-200"><i class="fas fa-tshirt mr-2"></i>當前裝備效果</h3>
-                            <div id="currentSetEffects" class="p-3 bg-white bg-opacity-20 rounded-lg border border-blue-200 text-white">
-                                <div class="text-sm">請先選擇裝備</div>
-                            </div>
-                        </div>
-                        
-                        <!-- 新裝備套裝效果 -->
-                        <div>
-                            <h3 class="text-lg font-medium mb-3 set-effect-header text-purple-200"><i class="fas fa-tshirt mr-2"></i>新裝備效果</h3>
-                            <div id="newSetEffects" class="p-3 bg-white bg-opacity-20 rounded-lg border border-purple-200 text-white">
-                                <div class="text-sm">請先選擇裝備</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            
-            <div class="mt-8 mb-8">
-                <div class="card-shadow rounded-2xl p-6 card-gradient-8 card-hover">
-                    <h2 class="text-xl font-semibold mb-4 section-title">📚 五維屬性轉換說明</h2>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="p-4 bg-white bg-opacity-20 rounded-lg border border-amber-100">
-                            <h3 class="text-lg font-medium mb-3 text-purple-200"><i class="fas fa-exchange-alt mr-2"></i>基礎轉換規則</h3>
-                            <ul class="text-sm space-y-2 text-white">
-                                <li><span class="font-medium">力量</span> → 攻擊: 4.65, 破防: 2.0</li>
-                                <li><span class="font-medium">氣海</span> → 攻擊: 4.65, 破防: 2.0</li>
-                                <li><span class="font-medium">身法</span> → 會心: 1.6, 命中: 0.83</li>
-                                <li><span class="font-medium">根骨</span> → 無直接轉換</li>
-                                <li><span class="font-medium">耐力</span> → 無直接轉換</li>
-                            </ul>
-                        </div>
-                        <div class="p-4 bg-white bg-opacity-20 rounded-lg border border-orange-100">
-                            <h3 class="text-lg font-medium mb-3 text-purple-200"><i class="fas fa-user-tie mr-2"></i>職業特殊轉換</h3>
-                            <ul class="text-sm space-y-2 text-white">
-                                <li><span class="font-medium">神相</span>: 氣海 → 命中: 0.83</li>
-                                <li><span class="font-medium">九靈</span>: 耐力 → 攻擊: 1.65</li>
-                                <li><span class="font-medium">龍吟</span>: 根骨 → 破防: 2.0</li>
-                                <li><span class="font-medium">碎夢</span>: 身法 → 會心: 0.6</li>
-                                <li><span class="font-medium">血河</span>: 根骨 → 攻擊: 1.65</li>
-                                <li class="font-bold"><span class="font-medium">特殊規則</span>: 當主職業為外功且特質為神相時，力量→命中: 0.83</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 頁腳 -->
-            <div class="text-center mt-12 mb-6 text-sm text-purple-300">
-                <p>傷害計算器 v2.0 | 完整內功配置版</p>
-                <p class="mt-2">© 2025 逆水寒傷害計算工具</p>
-            </div>
-        </div>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>逆水寒配裝模擬器 - 專業版</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+ </head>
+ <body>
+  <header class="main-header">
+   <div class="logo">
+    <h2 style="margin:0">逆水寒<span class="text-accent">模擬器</span></h2>
+   </div>
+   <div class="quick-stats">
+    <div style="font-size: 0.8em; color: #94a3b8;">預估傷害 (DPS)</div>
+    <div class="dps-main">
+     <span id="yield-num">0</span> <span id="yield-diff" style="font-size: 0.5em;"></span>
     </div>
+   </div>
+   <button id="btn-set-base">設為對比基準</button>
+  </header>
+  
+  <div class="app-container">
+   <main class="content-area">
+    <section id="section-base" class="glass-section">
+     <h2 class="section-title">⚔️ 基礎設定</h2>
+     <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+      <div>
+       <label>職業流派</label>
+                        <select id="select-profession">
+                            <option value="碎夢">碎夢</option>
+                            <option value="神相">神相</option>
+                            <option value="龍吟">龍吟</option>
+                            <option value="血河">血河</option>
+                            <option value="九靈">九靈</option>
+                            <option value="鐵衣">鐵衣</option>
+                            <option value="素問">素問</option>
+                            <option value="玄機">玄機</option>
+                        </select>
+      </div>
+      <div>
+       <label>潛學流派</label> <select id="select-sub-profession"><option value="無">無</option></select>
+      </div>
+      <div>
+       <label>首領目標</label> <select id="select-boss"></select>
+      </div>
+     </div>
+    </section>
 
-    <div id="notification" class="notification">
-        <i class="fas fa-info-circle mr-2"></i>當主職業為外功且特質為神相時，已啟用力量轉命中效果！
+    <section id="section-equip" class="glass-section">
+     <h2 class="section-title">🛡️ 裝備配置</h2>
+     <div id="equip-container" style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;"></div>
+    </section>
+
+    <section id="section-panel" class="glass-section">
+     <h2 class="section-title">🔍 核心面板 (15維)</h2>
+     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+      <div>
+       <h3 style="font-size: 1.1em; color: var(--accent); margin: 0 0 15px 0;">基礎面板</h3>
+       <div id="panel-display" style="display: flex; flex-direction: column; gap: 10px;"></div>
+      </div>
+      <div>
+       <h3 style="font-size: 1.1em; color: var(--accent); margin: 0 0 15px 0;">五維</h3>
+       <div id="panel-display-five" style="display: flex; flex-direction: column; gap: 10px;"></div>
+      </div>
+     </div>
+    </section>
+
+    <section id="section-inner" class="glass-section">
+     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 class="section-title" style="margin:0">🌀 內功配置</h2>
+        <button id="btn-reset-inners" style="padding: 8px 15px; font-size: 0.85em; border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.1);">
+            一鍵清空副詞條
+        </button>
+     </div>
+     <div id="inner-container" style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px;"></div>
+    </section>
+
+    <section id="section-optimization" class="glass-section">
+        <h2 class="section-title">🔮 智能優化路徑</h2>
+        <div style="background: rgba(15, 23, 42, 0.6); padding: 20px; border-radius: 12px; border: 1px solid rgba(0, 210, 255, 0.2);">
+            <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+                <div style="flex: 1;">
+                    <label>模擬分配詞條數：<span id="opt-step-display" class="text-accent">12</span></label>
+                    <input type="range" id="opt-step-slider" min="1" max="42" value="12" style="width: 100%; margin-top: 10px;">
+                </div>
+                <button id="btn-run-opt" style="background: var(--accent); color: var(--bg-dark); font-weight: bold; border: none; padding: 15px 30px;">
+                    執行優化分析
+                </button>
+            </div>
+            <div id="optimization-results">
+                <p style="text-align: center; color: #64748b; padding: 20px;">點擊上方按鈕開始模擬屬性收益...</p>
+            </div>
+        </div>
+    </section>
+   </main>
+
+   <nav class="side-nav">
+    <div style="font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">快速導航</div>
+    <ul class="nav-links">
+     <li><a href="#section-base">⚔️ 基礎設定</a></li>
+     <li><a href="#section-equip">🛡️ 裝備配裝</a></li>
+     <li><a href="#section-panel">🔍 核心面板</a></li>
+     <li><a href="#section-inner">🌀 內功配置</a></li>
+     <li><a href="#section-optimization">🔮 優化路徑</a></li>
+    </ul>
+    <div class="nav-footer" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 15px;">
+     <div style="font-size: 0.9em; font-weight: 600;">💾 配置管理</div>
+     <button id="btn-save-panel" style="width:100%;">儲存方案</button>
+     <div style="display:flex; gap:5px;">
+      <button id="btn-export" style="flex:1">匯出</button> <button id="btn-import" style="flex:1">匯入</button>
+     </div>
+     <div id="saved-list" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 210, 255, 0.15); border-radius: 8px; padding: 15px; font-size: 1.1em; max-height: 400px; overflow-y: auto; color: #cbd5e1;"></div>
     </div>
-
-<script src="main.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".toggle-btn").forEach(button => {
-        // 初始狀態設置
-        const card = button.closest('.card-hover');
-        const content = card.querySelector('.toggle-content');
-        
-        // 確保按鈕在展開狀態
-        const icon = button.querySelector("i");
-        icon.classList.add("fa-chevron-down");
-        icon.classList.remove("fa-chevron-right");
-        content.classList.remove("collapsed");
-        
-        button.addEventListener("click", () => {
-            content.classList.toggle("collapsed");
-            
-            // 更新按鈕圖標
-            if (content.classList.contains("collapsed")) {
-                icon.classList.remove("fa-chevron-down");
-                icon.classList.add("fa-chevron-right");
-            } else {
-                icon.classList.remove("fa-chevron-right");
-                icon.classList.add("fa-chevron-down");
-            }
-        });
-    });
-});
-</script>
-
-</body>
+   </nav>
+  </div>
+  <script type="module" src="js/main.js"></script>
+ </body>
 </html>
